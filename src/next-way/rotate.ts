@@ -6,7 +6,8 @@ export const rotate =
   async (config, next) => {
     const response = await next(config);
     if (!baseUrls.length) return response;
-    const index = (config.attempt - 1) % baseUrls.length;
+    if (isNaN(config.attempt) || config.attempt <= 0) return response;
+    const index = config.attempt % baseUrls.length;
     config.url = baseUrls[index];
     return response;
   };
