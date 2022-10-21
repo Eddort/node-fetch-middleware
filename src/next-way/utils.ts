@@ -1,4 +1,4 @@
-import { Response, FetchError } from "node-fetch";
+import { Response, FetchError, RequestInfo } from "node-fetch";
 import { HttpException } from "@nestjs/common";
 
 export const extractErrorBody = async (response: Response) => {
@@ -34,4 +34,20 @@ export const deepCopy = (obj) => {
       return newObj;
     }, {});
   }
+};
+
+export const getUrl = (
+  baseUrl: RequestInfo | null,
+  url: RequestInfo
+): RequestInfo => {
+  if (typeof url !== "string") return url;
+  if (baseUrl == null) return url;
+  if (isAbsoluteUrl(url)) return url;
+
+  return `${baseUrl}${url}`;
+};
+
+export const isAbsoluteUrl = (url: RequestInfo): boolean => {
+  const regexp = new RegExp("^(?:[a-z]+:)?//", "i");
+  return regexp.test(url.toString());
 };

@@ -1,8 +1,9 @@
 import { InternalConfig, Middleware, RequestConfig } from "./interfaces";
 import fetch, { Response } from "node-fetch";
-import { deepCopy } from "./utils";
+import { deepCopy, getUrl } from "./utils";
 
-const fetchCall = ({ url, ...rest }: RequestConfig) => fetch(url, rest);
+const fetchCall = ({ url, baseUrl, ...rest }: RequestConfig) =>
+  fetch(getUrl(baseUrl, url), rest);
 
 export function compose(middleware: Middleware[]): Middleware {
   return (requestConfig: RequestConfig, next) => {
@@ -23,4 +24,3 @@ export function compose(middleware: Middleware[]): Middleware {
     return chain(internalConfig, middleware);
   };
 }
-
