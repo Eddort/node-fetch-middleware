@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/lev-kuznetsov/node-fetch-middleware#readme",
   "dependencies": {
+    "@nestjs/common": "^9.1.4",
     "jquery-param": "^1.1.3",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2",
