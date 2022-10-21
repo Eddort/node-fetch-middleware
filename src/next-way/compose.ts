@@ -5,9 +5,9 @@ import { deepCopy } from "./utils";
 const fetchCall = ({ url, ...rest }: RequestConfig) => fetch(url, rest);
 
 export function compose(middleware: Middleware[]): Middleware {
-  return (config: RequestConfig, next) => {
+  return (requestConfig: RequestConfig, next) => {
     // copy object bcs we can mutate it
-    let internalConfig = deepCopy(config) as InternalConfig;
+    let internalConfig = deepCopy(requestConfig) as InternalConfig;
     internalConfig.attempt = 0;
 
     async function chain(
