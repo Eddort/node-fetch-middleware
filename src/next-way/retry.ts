@@ -3,7 +3,7 @@ import { Response } from "node-fetch";
 import { isNotServerError } from "./utils";
 
 export const retry =
-  (maxTries: number = 3): Middleware =>
+  (maxTries: number = 3, retryConfig: { ignoreAbort: boolean }): Middleware =>
   async (config, next) => {
     let response: Response;
     while (maxTries > config.attempt) {
@@ -11,10 +11,10 @@ export const retry =
       try {
         response = await next(config);
       } catch (error) {
-        // TODO: abort Error
+        if (error.name === "AbortError" && !retryConfig.ignoreAbort)
+          throw error;
         if (isNotServerError(error)) throw error;
         if (maxTries <= config.attempt) throw error;
-        // TODO: url from config
         // TODO: delay from Kirill method
         response = await next(config);
       }
